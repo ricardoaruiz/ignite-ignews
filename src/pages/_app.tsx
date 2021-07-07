@@ -5,15 +5,17 @@
 
 import { AppProps } from 'next/app'
 import { Header } from 'components/Header'
-
-import '../styles/global.scss'
+import { ThemeProvider } from 'styled-components'
+import { GlobalStyles } from 'styles/GlobalStyles'
+import { theme } from 'styles/theme/theme'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
       <Header />
       <Component {...pageProps} />
-    </>
+    </ThemeProvider>
   )
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styles from './styles.module.scss'
+import * as S from './styles'
 
 type GitHubSigninButtonProps = {
   isLogged?: boolean
@@ -12,15 +12,10 @@ export const GitHubSigninButton = ({
   loggedUser = '',
 }: GitHubSigninButtonProps) => {
   return (
-    <button type="button" className={styles.button}>
-      <img
-        src={`/images/${isLogged ? 'github-logged.svg' : 'github.svg'}`}
-        alt="github"
-      />
+    <S.Button type="button">
+      <S.GitHubIcon isLogged={isLogged} />
       <span>{!isLogged ? 'Sing in with GitHub' : loggedUser}</span>
-      {isLogged && (
-        <img src="/images/close.svg" alt="logoff" className={styles.close} />
-      )}
-    </button>
+      {isLogged && <S.CloseIcon />}
+    </S.Button>
   )
 }

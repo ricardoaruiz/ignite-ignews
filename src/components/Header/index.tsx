@@ -2,23 +2,23 @@ import React from 'react'
 
 import { GitHubSigninButton } from 'components/GitHubSigninButton'
 
-import styles from './styles.module.scss'
+import * as S from './styles'
 
 export const Header = () => {
   return (
-    <header className={styles.headerContainer}>
-      <div className={styles.headerContent}>
-        <div className={styles.content}>
+    <S.Wrapper>
+      <S.HeaderContent>
+        <S.Content>
           <img src="/images/logo.svg" alt="ig.news" />
-          <nav>
-            <a href="#" className={styles.active}>
+          <S.HeaderNav>
+            <S.NavItem href="#" isActive>
               Home
-            </a>
-            <a href="#">Posts</a>
-          </nav>
-        </div>
+            </S.NavItem>
+            <S.NavItem href="#">Posts</S.NavItem>
+          </S.HeaderNav>
+        </S.Content>
         <GitHubSigninButton />
-      </div>
-    </header>
+      </S.HeaderContent>
+    </S.Wrapper>
   )
 }

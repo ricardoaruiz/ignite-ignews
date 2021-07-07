@@ -5,14 +5,36 @@ import Document, {
   NextScript,
   DocumentContext,
 } from 'next/document'
+import { ServerStyleSheet } from 'styled-components'
 
 // Esse arquivo será carregado uma única vez para a aplicação
 // bom lugar para colocar coisas que devem ser compartilhadas
 // Esse arquivo seria o index.html no SPA
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
-    const initialProps = await Document.getInitialProps(ctx)
-    return { ...initialProps }
+    const sheet = new ServerStyleSheet()
+    const originalRenderPage = ctx.renderPage
+
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
+        })
+
+      const initialProps = await Document.getInitialProps(ctx)
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        ),
+      }
+    } finally {
+      sheet.seal()
+    }
   }
 
   render() {
