@@ -3,6 +3,7 @@
 
   --gray-100: #e1e1e6;
   --gray-300: #a8a8b3;
+  --gray-800: #29292e;
   --gray-900: #121214;
 
   --cyano-500: ##61dafb;
@@ -15,13 +16,17 @@
   box-sizing: border-box;
 }
 
-body {
+html {
   font-size: 62.5%;
-  background-color: var(--gray-900);
-  color: var(--white);
 }
 
-body, input, textarea, select, button {
+body {
+  background-color: var(--gray-900);
+  color: var(--white);
+  font-family: 'Roboto', sans-serif;
+}
+
+input, textarea, select, button {
   font-weight: 400;
   font-size: 1rem;
   font-family: 'Roboto', sans-serif;
