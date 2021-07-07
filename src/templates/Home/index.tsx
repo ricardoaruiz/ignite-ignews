@@ -1,4 +1,4 @@
-import { Container } from 'components'
+import { Container, SubscribeButton } from 'components'
 
 import * as S from './styles'
 
@@ -22,8 +22,7 @@ export const HomeTemplate = () => {
             Get acess to all the publications <span>for $9.90 month</span>
           </S.Disclaimer>
 
-          {/* TODO: Refatorar para um outro componente */}
-          <S.SubscribeButton type="button">Subscribe now</S.SubscribeButton>
+          <SubscribeButton />
         </S.TextSection>
 
         <S.IlustrationSection>
