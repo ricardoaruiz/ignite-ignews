@@ -2,7 +2,16 @@ import { Container, SubscribeButton } from 'components'
 
 import * as S from './styles'
 
-export const HomeTemplate = () => {
+type HomeTemplateProps = {
+  product: Product
+}
+
+export type Product = {
+  priceId: string
+  amount: string
+}
+
+export const HomeTemplate = ({ product }: HomeTemplateProps) => {
   return (
     <Container>
       <S.Main>
@@ -19,10 +28,11 @@ export const HomeTemplate = () => {
           </S.Title>
 
           <S.Disclaimer>
-            Get acess to all the publications <span>for $9.90 month</span>
+            Get acess to all the publications{' '}
+            <span>for {product.amount} month</span>
           </S.Disclaimer>
 
-          <SubscribeButton />
+          <SubscribeButton priceId={product.priceId} />
         </S.TextSection>
 
         <S.IlustrationSection>
