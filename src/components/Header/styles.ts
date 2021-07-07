@@ -1,5 +1,7 @@
 import styled, { css, DefaultTheme } from 'styled-components'
 
+import { Container } from 'components'
+
 export const Wrapper = styled.header`
   ${({ theme }) => css`
     height: 8rem;
@@ -7,11 +9,8 @@ export const Wrapper = styled.header`
   `};
 `
 
-export const HeaderContent = styled.div`
-  max-width: 112rem;
+export const HeaderContent = styled(Container)`
   height: 8rem;
-  margin: 0 auto;
-  padding: 0 3rem;
 
   display: flex;
   justify-content: space-between;
