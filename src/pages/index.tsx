@@ -1,6 +1,6 @@
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
-import { stripe } from 'services/stripe'
+import { getPrice } from 'services/stripe'
 
 import { HomeTemplate, Product } from 'templates/Home'
 
@@ -20,7 +20,7 @@ export default function Home({ product }: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const price = await stripe.prices.retrieve('price_1JAigcGyKjD8BZxZnqSuz2hE')
+  const price = await getPrice('price_1JAigcGyKjD8BZxZnqSuz2hE')
 
   const product = {
     priceId: price.id,

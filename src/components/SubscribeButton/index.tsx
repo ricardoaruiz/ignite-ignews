@@ -1,13 +1,10 @@
 import React from 'react'
 import { useSession, signIn } from 'next-auth/client'
 
-import * as S from './styles'
-import { api } from 'services/api'
-import { getStripeJs } from 'services/stripe-js'
+import { checkout } from 'services/api'
+import { getStripeJs } from 'services/stripe'
 
-type SubscribeResponse = {
-  sessionId: string
-}
+import * as S from './styles'
 
 type SubscribeButtonProps = {
   priceId: string
@@ -23,10 +20,7 @@ export const SubscribeButton = ({ priceId }: SubscribeButtonProps) => {
     }
 
     try {
-      const {
-        data: { sessionId },
-      } = await api.post<SubscribeResponse>(`/subscribe/${priceId}`)
-
+      const { sessionId } = await checkout(priceId)
       const stripe = await getStripeJs()
       await stripe.redirectToCheckout({ sessionId })
     } catch (error) {

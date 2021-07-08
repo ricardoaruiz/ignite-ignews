@@ -1,45 +1,31 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
-import { fauna } from 'services/fauna'
-import { stripe } from 'services/stripe'
-import { query as q } from 'faunadb'
+import { getUserByEmail, updateUser } from 'services/fauna'
+import { createCustomer, createCheckoutSession } from 'services/stripe'
 
 // https://stripe.com/docs/api/checkout/sessions/create
 
-type User = {
-  ref: {
-    id: string
-  }
-  data: {
-    stripe_custome_id?: string
-  }
-}
-
 export default async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === 'POST') {
+    // Get price id received on http request
     const { priceId } = request.query
-    const session = await getSession({ req: request })
 
-    const faunaCustomer = await fauna.query<User>(
-      q.Get(q.Match(q.Index('user_by_email'), q.Casefold(session.user.email)))
-    )
+    // Get logged user by next-auth
+    const { user: loggedUser } = await getSession({ req: request })
 
-    let customerId = faunaCustomer.data.stripe_custome_id
+    const faunaCustomer = await getUserByEmail(loggedUser.email)
+    let customerId = faunaCustomer.stripe_custome_id
 
     if (!customerId) {
-      const stripeCustomer = await stripe.customers.create({
-        email: session.user.email,
+      const stripeCustomer = await createCustomer({
+        email: loggedUser.email,
       })
       customerId = stripeCustomer.id
 
-      await fauna.query(
-        q.Update(q.Ref(q.Collection('users'), faunaCustomer.ref.id), {
-          data: { stripe_custome_id: customerId },
-        })
-      )
+      await updateUser(faunaCustomer.id, { stripe_custome_id: customerId })
     }
 
-    const stripeCheckoutSession = await stripe.checkout.sessions.create({
+    const stripeCheckoutSession = await createCheckoutSession({
       customer: customerId, // id do cliente
       payment_method_types: ['card'], // formas de pagamento aceitas na transação
       billing_address_collection: 'required', // indica se é necessário que o usuário informe o endereço
