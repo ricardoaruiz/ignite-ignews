@@ -6,15 +6,18 @@
 import { AppProps } from 'next/app'
 import { Header } from 'components/Header'
 import { ThemeProvider } from 'styled-components'
+import { Provider as NextAuthProvider } from 'next-auth/client'
 import { GlobalStyles } from 'styles/GlobalStyles'
 import { theme } from 'styles/theme/theme'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <Header />
-      <Component {...pageProps} />
+      <NextAuthProvider session={pageProps.session}>
+        <GlobalStyles />
+        <Header />
+        <Component {...pageProps} />
+      </NextAuthProvider>
     </ThemeProvider>
   )
 }
