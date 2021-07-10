@@ -1,9 +1,6 @@
 import Stripe from 'stripe'
 import { stripe } from './stripe'
-
-type CheckoutSession = {
-  id: string
-}
+import { CheckoutSession } from './types'
 
 export const createCheckoutSession = async (
   checkoutSession: Stripe.Checkout.SessionCreateParams

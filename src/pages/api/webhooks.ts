@@ -1,9 +1,13 @@
+/* eslint-disable no-case-declarations */
 // https://stripe.com/docs/stripe-cli
 // https://stripe.com/docs/webhooks/integration-builder
+// https://stripe.com/docs/testing#cards
 
 import { NextApiRequest, NextApiResponse } from 'next'
+import { saveSubscription } from 'services/fauna/subscription'
 import { stripe } from 'services/stripe'
 import { Readable } from 'stream'
+import Stripe from 'stripe'
 
 // Desabilita o entendimento padrão do Next sobre como a resposta é
 // recebida, por padrão seria JSON, mas nesse caso será uma Stream
@@ -38,12 +42,24 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       )
 
       if (relevantEvents.has(event.type)) {
-        console.log('evento recebido', event)
+        switch (event.type) {
+          case 'checkout.session.completed':
+            const checkoutSession = event.data.object as Stripe.Checkout.Session
+
+            await saveSubscription(
+              checkoutSession.subscription.toString(),
+              checkoutSession.customer.toString()
+            )
+            break
+          default:
+            throw new Error('Unhandled event.')
+        }
       }
 
       return response.json({ recebived: 'OK' })
     } catch (error) {
-      return response.status(400).send(`Webhook error: ${error.message}`)
+      console.log('error', error)
+      return response.json({ error: 'Webhook handler failed.' })
     }
   }
 

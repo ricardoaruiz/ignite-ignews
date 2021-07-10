@@ -1,9 +1,6 @@
 import Stripe from 'stripe'
 import { stripe } from './stripe'
-
-type Customer = {
-  email: string
-}
+import { Customer } from './types'
 
 export const createCustomer = async (
   customer: Customer

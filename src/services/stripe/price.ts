@@ -1,9 +1,5 @@
 import { stripe } from './stripe'
-
-type Price = {
-  id: string
-  unit_amount: number
-}
+import { Price } from './types'
 
 export const getPrice = async (priceId: string): Promise<Price> => {
   const { id, unit_amount } = await stripe.prices.retrieve(priceId)

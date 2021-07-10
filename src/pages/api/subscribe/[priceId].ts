@@ -14,7 +14,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     const { user: loggedUser } = await getSession({ req: request })
 
     const faunaCustomer = await getUserByEmail(loggedUser.email)
-    let customerId = faunaCustomer.stripe_custome_id
+    let customerId = faunaCustomer.stripe_customer_id
 
     if (!customerId) {
       const stripeCustomer = await createCustomer({
@@ -22,7 +22,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       })
       customerId = stripeCustomer.id
 
-      await updateUser(faunaCustomer.id, { stripe_custome_id: customerId })
+      await updateUser(faunaCustomer.id, { stripe_customer_id: customerId })
     }
 
     const stripeCheckoutSession = await createCheckoutSession({

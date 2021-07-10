@@ -1,17 +1,21 @@
 import { query as q } from 'faunadb'
 import { fauna } from './fauna'
+import { User, UserData } from './types'
 
-type User = {
-  ref: {
-    id: string
-  }
-  data: UserData
-}
-
-type UserData = {
-  id?: string
-  email?: string
-  stripe_custome_id?: string
+/**
+ * Get a user ref by Stripe identification
+ * @param customerId: string
+ * @returns user: UserData
+ */
+export const getUserRefByStripeCustomerId = async (
+  customerId: string
+): Promise<string> => {
+  return fauna.query<string>(
+    q.Select(
+      'ref',
+      q.Get(q.Match(q.Index('user_by_stripe_customer_id'), customerId))
+    )
+  )
 }
 
 /**
@@ -25,12 +29,12 @@ export const getUserByEmail = async (email: string): Promise<UserData> => {
   )
   const {
     ref: { id },
-    data: { stripe_custome_id },
+    data: { stripe_customer_id },
   } = foundUser
   return {
     id,
     email,
-    stripe_custome_id,
+    stripe_customer_id,
   }
 }
 
@@ -51,12 +55,12 @@ export const createOrGetUser = async (user: UserData): Promise<UserData> => {
   )
   const {
     ref: { id },
-    data: { email, stripe_custome_id },
+    data: { email, stripe_customer_id },
   } = createdUser
   return {
     id,
     email,
-    stripe_custome_id,
+    stripe_customer_id,
   }
 }
 
@@ -76,11 +80,11 @@ export const updateUser = async (
     })
   )
   const {
-    data: { email, stripe_custome_id },
+    data: { email, stripe_customer_id },
   } = updatedUser
   return {
     id,
     email,
-    stripe_custome_id,
+    stripe_customer_id,
   }
 }
