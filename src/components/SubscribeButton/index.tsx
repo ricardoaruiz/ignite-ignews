@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRouter } from 'next/router'
 import { useSession, signIn } from 'next-auth/client'
 
 import { checkout } from 'services/api'
@@ -11,6 +12,7 @@ type SubscribeButtonProps = {
 }
 
 export const SubscribeButton = ({ priceId }: SubscribeButtonProps) => {
+  const history = useRouter()
   const [session] = useSession()
 
   const handleSubscribe = React.useCallback(async () => {
@@ -20,13 +22,17 @@ export const SubscribeButton = ({ priceId }: SubscribeButtonProps) => {
     }
 
     try {
-      const { sessionId } = await checkout(priceId)
-      const stripe = await getStripeJs()
-      await stripe.redirectToCheckout({ sessionId })
+      const { sessionId, isAlreadySubscribed } = await checkout(priceId)
+
+      if (!isAlreadySubscribed) {
+        const stripe = await getStripeJs()
+        await stripe.redirectToCheckout({ sessionId })
+      }
+      history.push('/posts')
     } catch (error) {
       console.log('Erro ao realizar o checkout', error)
     }
-  }, [priceId, session])
+  }, [history, priceId, session])
 
   return (
     <S.SubscribeButton type="button" onClick={handleSubscribe}>

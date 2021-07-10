@@ -10,3 +10,10 @@ export type UserData = {
   email?: string
   stripe_customer_id?: string
 }
+
+export type Subscription = {
+  id: string
+  status: string
+  priceId: string
+  userId: string
+}
