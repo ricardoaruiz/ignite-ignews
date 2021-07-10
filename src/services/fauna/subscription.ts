@@ -4,6 +4,36 @@ import { getStripeSubscription } from 'services/stripe'
 import { getUserRefByStripeCustomerId } from 'services/fauna'
 import { Subscription } from 'services/fauna/types'
 
+export const getActiveSubscriptionByEmail = async (
+  email: string
+): Promise<Subscription | null> => {
+  return fauna.query(
+    q.If(
+      q.Exists(
+        q.Match(
+          q.Index('subscription_by_userId_status'),
+          q.Select(
+            'ref',
+            q.Get(q.Match(q.Index('user_by_email'), q.Casefold(email)))
+          ),
+          'active'
+        )
+      ),
+      q.Get(
+        q.Match(
+          q.Index('subscription_by_userId_status'),
+          q.Select(
+            'ref',
+            q.Get(q.Match(q.Index('user_by_email'), q.Casefold(email)))
+          ),
+          'active'
+        )
+      ),
+      null
+    )
+  )
+}
+
 export const getActiveSubscription = async (
   customerId: string,
   priceId
@@ -44,6 +74,9 @@ export const saveSubscription = async (
 ): Promise<void> => {
   const customerRef = await getUserRefByStripeCustomerId(customerId)
   const stripeSubscription = await getStripeSubscription(subscriptionId)
+
+  console.log('stripeSubscription', stripeSubscription)
+
   const faunaSubscriptionData = { ...stripeSubscription, userId: customerRef }
 
   if (createAction) {

@@ -1,14 +1,5 @@
 import { api } from './api'
-
-type SubscribeResponse = {
-  sessionId?: string
-  isAlreadySubscribed?: boolean
-}
-
-type CheckoutData = {
-  sessionId?: string
-  isAlreadySubscribed?: boolean
-}
+import { CheckoutData, SubscribeResponse } from './types'
 
 export const checkout = async (priceId: string): Promise<CheckoutData> => {
   const {
