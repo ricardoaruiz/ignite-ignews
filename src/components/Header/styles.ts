@@ -55,6 +55,7 @@ export const NavItem = styled.a<NavItemProps>`
     color: ${theme.colors.gray300};
     transition: color 0.2s;
     font-size: 1.6rem;
+    cursor: pointer;
 
     & + a {
       margin-left: 3rem;

@@ -3,6 +3,7 @@ export type Theme = {
     white: string
     gray100: string
     gray300: string
+    gray700: string
     gray800: string
     gray850: string
     gray900: string
