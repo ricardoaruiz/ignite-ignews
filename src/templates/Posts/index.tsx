@@ -12,12 +12,12 @@ export default function PostsTemplate({ posts }: PostsTemplateProps) {
   return (
     <Container>
       <S.PostList>
-        {posts.map(({ slug, updatedAt, title, excerpt }) => (
-          <Link href={`/post/${slug}`} key={slug}>
+        {posts.map(({ slug, updatedAt, title, content }) => (
+          <Link href={`/posts/${slug}`} key={slug}>
             <S.Post>
               <S.Time>{updatedAt}</S.Time>
               <S.Title>{title}</S.Title>
-              <S.Excerpt>{excerpt}</S.Excerpt>
+              <S.Excerpt>{content}</S.Excerpt>
             </S.Post>
           </Link>
         ))}
