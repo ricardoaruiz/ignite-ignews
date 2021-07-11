@@ -15,7 +15,9 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     const { priceId } = request.query
 
     // Get logged user by next-auth
-    const { user: loggedUser } = await getSession({ req: request })
+    const { user: loggedUser, subscription } = await getSession({
+      req: request,
+    })
 
     const faunaCustomer = await getUserByEmail(loggedUser.email)
     let customerId = faunaCustomer.stripe_customer_id
@@ -32,12 +34,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     }
 
     try {
-      const faunaActiveSubscription = await getActiveSubscription(
-        customerId,
-        priceId
-      )
-
-      if (!faunaActiveSubscription) {
+      if (!subscription) {
         const stripeCheckoutSession = await createCheckoutSession({
           customer: customerId, // id do cliente no stripe
           payment_method_types: ['card'], // formas de pagamento aceitas na transação

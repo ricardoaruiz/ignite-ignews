@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth'
+import { session } from 'next-auth/client'
 import Providers from 'next-auth/providers'
-import { createOrGetUser } from 'services/fauna'
+import { createOrGetUser, getActiveSubscriptionByEmail } from 'services/fauna'
 
 // https://next-auth.js.org/getting-started/introduction
 // https://next-auth.js.org/getting-started/example
@@ -8,7 +9,7 @@ import { createOrGetUser } from 'services/fauna'
 // https://next-auth.js.org/getting-started/rest-api
 
 export default NextAuth({
-  // Configure one or more authentication providers
+  // https://next-auth.js.org/providers/github
   providers: [
     Providers.GitHub({
       clientId: process.env.GITHUB_ID,
@@ -16,14 +17,23 @@ export default NextAuth({
       scope: 'read:user',
     }),
   ],
+  // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    async signIn(user, account, profile) {
+    async signIn(user) {
       try {
         await createOrGetUser(user)
         return true
       } catch (error) {
         console.log('error', error)
         return false
+      }
+    },
+    async session(session, user) {
+      try {
+        const subscription = await getActiveSubscriptionByEmail(user.email)
+        return { ...session, subscription }
+      } catch {
+        return session
       }
     },
   },
