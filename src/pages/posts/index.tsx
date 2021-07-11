@@ -1,16 +1,27 @@
+import { GetStaticProps } from 'next'
 import Head from 'next/head'
-import PostsTemplate from 'templates/Posts'
+import { getPosts } from 'services/prismic'
+import PostsTemplate, { PostsTemplateProps } from 'templates/Posts'
 
-const Posts = () => {
+export default function Posts({ posts }: PostsTemplateProps) {
   return (
     <>
       <Head>
         <title>Posts | ig news</title>
       </Head>
 
-      <PostsTemplate />
+      <PostsTemplate posts={posts} />
     </>
   )
 }
 
-export default Posts
+export const getStaticProps: GetStaticProps<PostsTemplateProps> = async () => {
+  const posts = await getPosts()
+
+  return {
+    props: {
+      posts,
+    },
+    revalidate: 60 * 60,
+  }
+}

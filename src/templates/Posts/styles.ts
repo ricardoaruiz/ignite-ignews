@@ -29,7 +29,7 @@ export const Title = styled.strong`
   `};
 `
 
-export const Disclamer = styled.p`
+export const Excerpt = styled.p`
   ${({ theme }) => css`
     font-weight: normal;
     font-size: 1.6rem;

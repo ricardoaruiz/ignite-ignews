@@ -2,44 +2,26 @@ import Link from 'next/link'
 import { Container } from 'components'
 
 import * as S from './styles'
+import { Post } from 'services/prismic/types'
 
-const PostsTemplate = () => {
+export type PostsTemplateProps = {
+  posts: Post[]
+}
+
+export default function PostsTemplate({ posts }: PostsTemplateProps) {
   return (
     <Container>
       <S.PostList>
-        <Link href="#">
-          <S.Post>
-            <S.Time>12 de março de 2021</S.Time>
-            <S.Title>Creating a Monorepo with Lerna & Yarn Workspaces</S.Title>
-            <S.Disclamer>
-              In this guide, you will learn how to create a Monorepo to manage
-              multiple packages with a shared build, test, and release process.
-            </S.Disclamer>
-          </S.Post>
-        </Link>
-        <Link href="#">
-          <S.Post>
-            <S.Time>12 de março de 2021</S.Time>
-            <S.Title>Creating a Monorepo with Lerna & Yarn Workspaces</S.Title>
-            <S.Disclamer>
-              In this guide, you will learn how to create a Monorepo to manage
-              multiple packages with a shared build, test, and release process.
-            </S.Disclamer>
-          </S.Post>
-        </Link>
-        <Link href="#">
-          <S.Post>
-            <S.Time>12 de março de 2021</S.Time>
-            <S.Title>Creating a Monorepo with Lerna & Yarn Workspaces</S.Title>
-            <S.Disclamer>
-              In this guide, you will learn how to create a Monorepo to manage
-              multiple packages with a shared build, test, and release process.
-            </S.Disclamer>
-          </S.Post>
-        </Link>
+        {posts.map(({ slug, updatedAt, title, excerpt }) => (
+          <Link href={`/post/${slug}`} key={slug}>
+            <S.Post>
+              <S.Time>{updatedAt}</S.Time>
+              <S.Title>{title}</S.Title>
+              <S.Excerpt>{excerpt}</S.Excerpt>
+            </S.Post>
+          </Link>
+        ))}
       </S.PostList>
     </Container>
   )
 }
-
-export default PostsTemplate
