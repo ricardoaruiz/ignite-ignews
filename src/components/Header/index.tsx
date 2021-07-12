@@ -1,13 +1,8 @@
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-
 import { ActiveLink, GitHubSigninButton } from 'components'
 
 import * as S from './styles'
 
 export const Header = () => {
-  const router = useRouter()
-
   return (
     <S.Wrapper>
       <S.HeaderContent>

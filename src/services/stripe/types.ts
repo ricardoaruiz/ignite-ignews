@@ -1,5 +1,3 @@
-import Stripe from 'stripe'
-
 export type CheckoutSession = {
   id: string
 }

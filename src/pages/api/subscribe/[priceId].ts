@@ -1,10 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
-import {
-  getActiveSubscription,
-  getUserByEmail,
-  updateUser,
-} from 'services/fauna'
+import { getUserByEmail, updateUser } from 'services/fauna'
 import { createCustomer, createCheckoutSession } from 'services/stripe'
 
 // https://stripe.com/docs/api/checkout/sessions/create
