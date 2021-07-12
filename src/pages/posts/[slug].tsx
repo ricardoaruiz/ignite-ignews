@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   }
 
-  const post = await getPost(String(slug), req)
+  const post = await getPost({ id: String(slug), req })
 
   return {
     props: {

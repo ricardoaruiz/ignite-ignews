@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled, { css, DefaultTheme } from 'styled-components'
 
 export const Article = styled.article`
   max-width: 72rem;
@@ -25,8 +25,22 @@ export const Time = styled.time`
     display: block;
   `};
 `
-export const Content = styled.div`
-  ${({ theme }) => css`
+
+type ContentProps = {
+  isPreview?: boolean
+}
+
+const contentModifiers = {
+  preview: (theme: DefaultTheme) => css`
+    background: linear-gradient(${theme.colors.gray100}, transparent);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  `,
+}
+
+export const Content = styled.div<ContentProps>`
+  ${({ theme, isPreview = false }) => css`
     font-weight: normal;
     font-size: 1.6rem;
     line-height: 2.6rem;
@@ -68,6 +82,36 @@ export const Content = styled.div`
       background-color: ${theme.colors.gray850};
       padding: 1rem;
       border-radius: 0.5rem;
+    }
+
+    ${isPreview && contentModifiers.preview(theme)};
+  `};
+`
+export const PreviewSubscribeButton = styled.div`
+  ${({ theme }) => css`
+    height: 8rem;
+    border-radius: 8rem;
+    background-color: ${theme.colors.gray850};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4.8rem;
+    cursor: pointer;
+    transition: filter 0.3s;
+
+    p {
+      font-weight: bold;
+      font-size: 2rem;
+      line-height: 2.3rem;
+      margin-right: 1.6rem;
+
+      span {
+        color: ${theme.colors.yellow500};
+      }
+    }
+
+    &:hover {
+      filter: brightness(0.8);
     }
   `};
 `

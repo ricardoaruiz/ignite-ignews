@@ -38,7 +38,7 @@ export const Excerpt = styled.p`
   `};
 `
 
-export const Post = styled.a`
+export const Post = styled.div`
   ${({ theme }) => css`
     display: block;
     padding: 3.2rem 0;

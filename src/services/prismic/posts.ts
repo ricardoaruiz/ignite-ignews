@@ -32,27 +32,31 @@ export const getPosts = async (req?: unknown): Promise<Post[]> => {
   )
 }
 
+type GetPostParams = {
+  id: string
+  req?: unknown
+  isPreview?: boolean
+}
 /**
  * Get a post by slug
  * @param id
  * @param req
  * @returns
  */
-export const getPost = async (id: string, req?: unknown): Promise<Post> => {
+export const getPost = async ({
+  id,
+  isPreview = false,
+  req,
+}: GetPostParams): Promise<Post> => {
   const prismic = getPrismicClient(req)
-
   const post = await prismic.getByUID('post', id, {})
 
-  const {
-    uid,
-    last_publication_date,
-    data: { title, content },
-  } = post
-
   return {
-    slug: uid,
-    title: RichText.asText(title),
-    content: RichText.asHtml(content),
-    updatedAt: toDateString(new Date(last_publication_date)),
+    slug: post.uid,
+    title: RichText.asText(post.data.title),
+    content: !isPreview
+      ? RichText.asHtml(post.data.content)
+      : RichText.asHtml(post.data.content.splice(0, 3)),
+    updatedAt: toDateString(new Date(post.last_publication_date)),
   }
 }
