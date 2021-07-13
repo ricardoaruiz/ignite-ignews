@@ -33,7 +33,7 @@ export default function Post({ post }: PostPageProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await getPosts()
+  const posts = await getPosts(null, 1)
 
   return {
     paths: posts.map(({ slug }) => ({
@@ -41,7 +41,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         slug,
       },
     })),
-    fallback: false,
+    fallback: 'blocking',
   }
 }
 

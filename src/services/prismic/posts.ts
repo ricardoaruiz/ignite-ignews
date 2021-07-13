@@ -9,14 +9,17 @@ import { Post } from './types'
  * @param req
  * @returns
  */
-export const getPosts = async (req?: unknown): Promise<Post[]> => {
+export const getPosts = async (
+  req?: unknown,
+  pageSize?: number
+): Promise<Post[]> => {
   const prismic = getPrismicClient(req)
 
   const response = await prismic.query(
     [Prismic.predicates.at('document.type', 'post')],
     {
       fetch: ['post.title', 'post.content'],
-      pageSize: 100,
+      pageSize: pageSize || 100,
     }
   )
 

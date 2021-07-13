@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { getPrice } from 'services/stripe'
 
 import { HomeTemplate, Product } from 'templates/Home'
+import { formatCurrency } from 'utils/number'
 
 type HomeProps = {
   product: Product
@@ -25,10 +26,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const product = {
     priceId: price.id,
-    amount: new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price.unit_amount / 100),
+    amount: formatCurrency(price.unit_amount),
   }
 
   return {

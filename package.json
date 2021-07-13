@@ -47,6 +47,9 @@
     "prettier": "^2.3.2",
     "typescript": "^4.3.5"
   },
+  "browser":{
+    "child_process": false
+  },
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
