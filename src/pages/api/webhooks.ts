@@ -5,7 +5,7 @@
 
 import { NextApiRequest, NextApiResponse } from 'next'
 import { saveSubscription } from 'services/fauna/subscription'
-import { stripe } from 'services/stripe'
+import stripeClient from 'services/stripe/stripe'
 import { Readable } from 'stream'
 import Stripe from 'stripe'
 
@@ -40,7 +40,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     try {
       const buf = await buffer(request)
       const secret = request.headers['stripe-signature']
-      const event = stripe.webhooks.constructEvent(
+      const event = stripeClient.webhooks.constructEvent(
         buf,
         secret,
         process.env.STRIPE_WEBHOOK_SECRET

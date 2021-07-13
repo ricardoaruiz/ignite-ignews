@@ -1,9 +1,9 @@
 import Stripe from 'stripe'
-import { stripe } from './stripe'
+import stripeClient from './stripe'
 import { Customer } from './types'
 
 export const createCustomer = async (
   customer: Customer
 ): Promise<Stripe.Customer> => {
-  return stripe.customers.create(customer)
+  return stripeClient.customers.create(customer)
 }

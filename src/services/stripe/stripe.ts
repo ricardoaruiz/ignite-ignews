@@ -3,9 +3,11 @@ import Stripe from 'stripe'
 
 // https://stripe.com/docs/api
 
-export const stripe = new Stripe(process.env.STRIPE_API_KEY, {
+const stripe = new Stripe(process.env.STRIPE_API_KEY, {
   apiVersion: '2020-08-27',
   appInfo: {
     name: 'Ignews',
   },
 })
+
+export default stripe

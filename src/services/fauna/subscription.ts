@@ -75,8 +75,6 @@ export const saveSubscription = async (
   const customerRef = await getUserRefByStripeCustomerId(customerId)
   const stripeSubscription = await getStripeSubscription(subscriptionId)
 
-  console.log('stripeSubscription', stripeSubscription)
-
   const faunaSubscriptionData = { ...stripeSubscription, userId: customerRef }
 
   if (createAction) {

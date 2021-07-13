@@ -1,10 +1,10 @@
-import { stripe } from './stripe'
+import stripeClient from './stripe'
 import { Subscription } from './types'
 
 export const getStripeSubscription = async (
   subscriptionId: string
 ): Promise<Subscription> => {
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+  const subscription = await stripeClient.subscriptions.retrieve(subscriptionId)
   const { id, status, items } = subscription
   return {
     id,

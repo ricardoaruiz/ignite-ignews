@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useSession, signIn } from 'next-auth/client'
 
 import { checkout } from 'services/api'
-import { getStripeJs } from 'services/stripe'
+import getStripeJs from 'services/stripe/stripe-js'
 
 import * as S from './styles'
 
